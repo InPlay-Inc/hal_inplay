@@ -1,0 +1,6 @@
+name: hal_inplay
+build:
+  cmake: .
+  kconfig: Kconfig
+  settings:
+    dts_root: .
