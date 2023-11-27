@@ -48,7 +48,7 @@
 #define CFG_STACK_SIZE	0x400
 #define CFG_HEAP_SIZE	0x400
 /// @Misc::DEBUG
-#define CFG_DBG_EN	1
+#define CFG_DBG_EN	0
 #define CFG_DBG_IF_UART	1
 #define CFG_DBG_IF_UART_PORT	1
 #define CFG_DBG_IF_UART_BAUD	115200
@@ -101,7 +101,7 @@
 #define CFG_QSPI_CLK	32000000
 #define CFG_AUDIO_SDM_CLK_MUX	0
 #define CFG_SI2S_CLK_MUX	1
-#define CFG_RTC_EN	1
+#define CFG_RTC_EN	0
 #define CFG_LPC_PPM_OFFSET	0
 #define CFG_RTC_CAP	0x03
 #define CFG_LPC_CALIB	1
@@ -191,7 +191,7 @@
 #define CFG_WDT_EN	0
 #define CFG_AUDIO_EN	0
 #define CFG_EFUSE_EN	0
-#define CFG_SADC_EN	1
+#define CFG_SADC_EN	0
 #define CFG_QD_EN	0
 #define CFG_PWM0_EN	0
 #define CFG_PWM1_EN	0
@@ -314,7 +314,7 @@
 #define CFG_BLE_DEV_RENEW_DURATION	41400
 #define CFG_BLE_DEV_IDENTITY_ADDR	0	///Public address
 #define CFG_BLE_DEV_STATIC_ADDR	0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-#define CFG_BLE_DEV_PAIR_MODE	0x01
+#define CFG_BLE_DEV_PAIR_MODE	0x03
 #define CFG_BLE_DEV_GAP_START_HANDLE	0
 #define CFG_BLE_DEV_GATT_START_HANDLE	0
 #define CFG_BLE_DEV_ATT_DEV_NAME_WRT_PERM	0

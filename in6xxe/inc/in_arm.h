@@ -27,4 +27,13 @@
 #include "core_cm4.h"                       				/* Processor and core peripherals */
 #include "mpu_armv7.h"                       				
 
+__attribute__((always_inline)) static inline uint32_t disable_irq(void)
+{
+  uint32_t result;
+
+  __asm volatile ("mrs %0, primask" : "=r" (result));
+  __asm volatile ("cpsid i");
+  return(result & 1);
+}
+
 #endif

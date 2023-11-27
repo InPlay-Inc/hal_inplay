@@ -1,0 +1,16 @@
+apply_drf_code = 0x000010f5;
+delay_n_us = 0x00001f99;
+get_bod_offset_from_efuse_uint_mv = 0x00002237;
+get_fe_rssi = 0x000022dd;
+prog_bod_en = 0x00003c49;
+prog_bod_threshold = 0x00003ca9;
+read_dbv_and_apply_dbv = 0x0000400b;
+read_drf_and_apply_drf = 0x00004025;
+read_efuse_word = 0x00004041;
+rf_int_prog_pll_trx_trig = 0x000041cd;
+rf_int_rpl_mdm_init = 0x000042ad;
+rf_int_set_tx_power = 0x000042b1;
+rx_dc_calib = 0x00005d81;
+sum_2_s4_num = 0x000074d1;
+pka_fw = 0x00008f6c;
+SEC256R1 = 0x00009c64;

@@ -56,6 +56,11 @@ static void dummy(int flag, const char *fmt, ...) {}
 #define DBG_WARN	0x02
 #define DBG_TRACE	0x0
 #define PRINTD(flag, fmt, ...)
+enum dbg_if {
+	DBG_IF_NONE = 0,
+	DBG_IF_RTT_VIEW,
+	DBG_IF_UART,
+};
 #endif
 #endif	// IN_DEBG_H
 

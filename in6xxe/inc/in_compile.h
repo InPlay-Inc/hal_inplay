@@ -35,6 +35,16 @@
 
 #define MST_RO 
 #define SLV_RO 
+
+#if defined (__GNUC__)
+#define __irq
+#define __nop __NOP
+#define __rev __REV
+#define __weak   __attribute__((weak))
+#define __forceinline __attribute__((always_inline))
 #endif
+
+#endif
+
 #endif
 

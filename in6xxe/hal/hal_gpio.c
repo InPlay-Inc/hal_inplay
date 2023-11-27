@@ -1,3 +1,10 @@
+#define CFG_BUILD_ROM 0
+#define CFG_HAL_ROM 0
+
+#if !(CFG_BUILD_ROM)
+#include "in_config.h"
+#endif	// !CFG_BUILD_ROM 
+
 /**
  ****************************************************************************************
  *
@@ -22,7 +29,7 @@
 
 #include "./hal/hal_gpio.h"
 #include "./hal/hal_clk.h"
-//#include "./hal/hal_power.h"
+#include "./hal/hal_power.h"
 
 /*
  * Types
@@ -127,7 +134,7 @@ typedef struct {
  * Static Variables
  ****************************************************************************************
  */
-
+#if !(CFG_BUILD_ROM)
 static gio_intr_cb_t g_port_0_int_cb[GPIO_PORT_0_NB_PINS];
 static gio_intr_cb_t g_port_1_int_cb[GPIO_PORT_1_NB_PINS];
 static gio_intr_cb_t g_port_2_int_cb[GPIO_PORT_2_NB_PINS];
@@ -255,8 +262,11 @@ static gio_t g_gio = {
 	.pin_mux_gpio_pc_01_reg_dft = GLOBAL_REG_PIN_MUX_GPIO_PC_01_DEFAULT,
 	.pin_mux_gpio_pc_234_reg_dft = GLOBAL_REG_PIN_MUX_GPIO_PC_234_DEFAULT,
 };
+#endif	// !CFG_BUILD_ROM */ 
 
-static gio_rom_if_t g_gio_if = {
+#if !CFG_BUILD_ROM
+
+gio_rom_if_t g_gio_if = {
 	(void *)&g_gio,
 
 	hal_gpio_pin_mux,
@@ -267,15 +277,21 @@ static gio_rom_if_t g_gio_if = {
 
 };
 
+#endif	// !CFG_BUILD_ROM
+
+
+#if (CFG_BUILD_ROM) || !(CFG_HAL_ROM)
 /*
  * ISR
  ****************************************************************************************
  */
-
+#if !(CFG_BUILD_ROM)
+void gpio_isr_handler(int port) __attribute__((section("ISR")));
+#endif	// !CFG_BUILD_ROM */ 
 void gpio_isr_handler(int port)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 	gio_port_t *p_port = &gio->port[port];
 	uint32_t status = RD_WORD(p_port->intr_gpio_status_reg);
 	uint32_t mask = RD_WORD(p_port->intr_gpio_mask_status_reg);
@@ -314,6 +330,45 @@ void gpio_isr_handler(int port)
 }
 
 
+#if !(CFG_BUILD_ROM)
+_IRQ void Gpio_0_Handler(void) __attribute__((section("RAM_PM")));
+#endif	// !CFG_BUILD_ROM 
+_IRQ void Gpio_0_Handler(void)
+{
+	gpio_isr_handler(0);
+}
+
+#if !(CFG_BUILD_ROM)
+_IRQ void Gpio_1_Handler(void) __attribute__((section("RAM_PM")));
+#endif	// !CFG_BUILD_ROM 
+_IRQ void Gpio_1_Handler(void)
+{
+	gpio_isr_handler(1);
+}
+
+#if !(CFG_BUILD_ROM)
+_IRQ void Gpio_2_Handler(void) __attribute__((section("RAM_PM")));
+#endif	// !CFG_BUILD_ROM
+_IRQ void Gpio_2_Handler(void)
+{
+	gpio_isr_handler(2);
+}
+
+#if !(CFG_BUILD_ROM)
+_IRQ void Gpio_3_Handler(void) __attribute__((section("RAM_PM")));
+#endif	// !CFG_BUILD_ROM
+_IRQ void Gpio_3_Handler(void)
+{
+	gpio_isr_handler(3);
+}
+
+#if !(CFG_BUILD_ROM)
+_IRQ void Gpio_4_Handler(void) __attribute__((section("RAM_PM")));
+#endif	// !CFG_BUILD_ROM
+_IRQ void Gpio_4_Handler(void)
+{
+	gpio_isr_handler(4);
+}
 
 /*
  * APIs
@@ -321,8 +376,8 @@ void gpio_isr_handler(int port)
  */
 void hal_gpio_init(void)
 {
-	////rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	/// pin mux
 	gio->pin_mux_gpio_0_reg = RD_WORD(GLOBAL_REG_PIN_MUX_GPIO_0);
@@ -384,8 +439,8 @@ void hal_gpio_pin_dft(uint32_t pin_cfg)
 
 int hal_gpio_pin_mux(int port, int pin, int mux, int inv)
 {
-	////rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return GPIO_ERR_INVALID_PARAM;
@@ -456,8 +511,8 @@ int hal_gpio_pin_mux(int port, int pin, int mux, int inv)
 
 int hal_gpio_output(int port, int pin, int high, int en)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return GPIO_ERR_INVALID_PARAM;
@@ -520,8 +575,8 @@ int hal_gpio_output(int port, int pin, int high, int en)
 
 int hal_gpio_output_status(int port, int pin)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return 0;
@@ -559,8 +614,8 @@ int hal_gpio_output_status(int port, int pin)
 
 int hal_gpio_input_status(int port, int pin)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return 0;
@@ -598,8 +653,8 @@ int hal_gpio_input_status(int port, int pin)
 
 int hal_gpio_pad_oe_ie(int port, int pin, int oe, int ie)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return GPIO_ERR_INVALID_PARAM;
@@ -656,8 +711,8 @@ int hal_gpio_pad_oe_ie(int port, int pin, int oe, int ie)
 
 int hal_gpio_pad_pd_pu(int port, int pin, int pd, int pu)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return GPIO_ERR_INVALID_PARAM;
@@ -714,8 +769,8 @@ int hal_gpio_pad_pd_pu(int port, int pin, int pd, int pu)
 
 int hal_gpio_pad_pc(int port, int pin, int en)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return GPIO_ERR_INVALID_PARAM;
@@ -756,10 +811,10 @@ int hal_gpio_pad_pc(int port, int pin, int en)
 
 int hal_gpio_sleep_pad_latch(int port, int pin, int latch, int manual)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
-	if (1) {
+	if (pif->sys->cfg_pm_en) {
 
 		if ((port >= GPIO_PORT_MAX) || (port < 0))
 			return GPIO_ERR_INVALID_PARAM;
@@ -809,10 +864,10 @@ int hal_gpio_sleep_pad_latch(int port, int pin, int latch, int manual)
 
 int hal_gpio_sleep_pad_mask(int port, int pin, int mask)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
-	if (1) {
+	if (pif->sys->cfg_pm_en) {
 
 		if ((port >= GPIO_PORT_MAX) || (port < 0))
 			return GPIO_ERR_INVALID_PARAM;
@@ -851,10 +906,10 @@ int hal_gpio_sleep_pad_mask(int port, int pin, int mask)
 
 int hal_gpio_sleep_wup_mask(int port, int pin, int mask)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
-	if (1) {
+	if (pif->sys->cfg_pm_en) {
 
 		if ((port >= GPIO_PORT_MAX) || (port < 0))
 			return GPIO_ERR_INVALID_PARAM;
@@ -899,10 +954,10 @@ int hal_gpio_sleep_wup_mask(int port, int pin, int mask)
 
 int hal_gpio_sleep_wup_polarity(int port, int pin, int pol)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
-	if (1) {
+	if (pif->sys->cfg_pm_en) {
 
 		if ((port >= GPIO_PORT_MAX) || (port < 0))
 			return GPIO_ERR_INVALID_PARAM;
@@ -947,10 +1002,10 @@ int hal_gpio_sleep_wup_polarity(int port, int pin, int pol)
 
 int hal_gpio_sleep_wup_edge(int port, int pin, int rise, int fall)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
-	if (1) {
+	if (pif->sys->cfg_pm_en) {
 
 		if ((port >= GPIO_PORT_MAX) || (port < 0))
 			return GPIO_ERR_INVALID_PARAM;
@@ -1008,10 +1063,10 @@ int hal_gpio_sleep_wup_edge(int port, int pin, int rise, int fall)
 
 int hal_gpio_sleep_wup_edge_clear_manual(int port, int pin)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
-	if (1) {
+	if (pif->sys->cfg_pm_en) {
 
 		if ((port >= GPIO_PORT_MAX) || (port < 0))
 			return GPIO_ERR_INVALID_PARAM;
@@ -1047,10 +1102,10 @@ int hal_gpio_sleep_wup_edge_clear_manual(int port, int pin)
 
 int hal_gpio_sleep_wup_edge_clear_auto(int port, int pin, int en)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
-	if (1) {
+	if (pif->sys->cfg_pm_en) {
 		if ((port >= GPIO_PORT_MAX) || (port < 0))
 			return GPIO_ERR_INVALID_PARAM;
 
@@ -1099,10 +1154,10 @@ int hal_gpio_sleep_wup_edge_clear_auto(int port, int pin, int en)
 
 int hal_gpio_sleep_wup_edge_detect(int port, int pin, int en)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
-	if (1) {
+	if (pif->sys->cfg_pm_en) {
 
 		if ((port >= GPIO_PORT_MAX) || (port < 0))
 			return GPIO_ERR_INVALID_PARAM;
@@ -1144,10 +1199,10 @@ int hal_gpio_sleep_wup_edge_detect(int port, int pin, int en)
 
 int hal_gpio_sleep_wup_edge_latch(int port, int pin, int en)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
-	if (1) {
+	if (pif->sys->cfg_pm_en) {
 
 		if ((port >= GPIO_PORT_MAX) || (port < 0))
 			return GPIO_ERR_INVALID_PARAM;
@@ -1403,8 +1458,8 @@ void hal_gpio_reset_arm(int en, int port, int pin, int fall, int deb, int sys_rs
 
 int hal_gpio_ext_int_prio(int port, int prio)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return GPIO_ERR_INVALID_PARAM;
@@ -1421,8 +1476,8 @@ int hal_gpio_ext_int_prio(int port, int prio)
 
 int hal_gpio_ext_int_reg(int port, int pin, void *arg, void (*callback)(void *, int, int, int))
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return GPIO_ERR_INVALID_PARAM;
@@ -1436,7 +1491,7 @@ int hal_gpio_ext_int_reg(int port, int pin, void *arg, void (*callback)(void *, 
 
 	if (p_port->map == 0) {
 		// enable clock 
-		//pif->clk->hal_clk_gpio_intr(port, 1);  //review
+		pif->clk->hal_clk_gpio_intr(port, 1);  
 		NVIC_ClearPendingIRQ((IRQn_Type)p_port->irq);
 		NVIC_SetPriority((IRQn_Type)p_port->irq, p_port->prio);
 		NVIC_EnableIRQ((IRQn_Type)p_port->irq);
@@ -1451,8 +1506,8 @@ int hal_gpio_ext_int_reg(int port, int pin, void *arg, void (*callback)(void *, 
 
 int hal_gpio_ext_int_unreg(int port, int pin)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return GPIO_ERR_INVALID_PARAM;
@@ -1464,7 +1519,7 @@ int hal_gpio_ext_int_unreg(int port, int pin)
 	p_port->map &= ~(1 << pin);
 	if (p_port->map == 0) {
 		// disable clock 
-		//pif->clk->hal_clk_gpio_intr(port, 0);  //review
+		pif->clk->hal_clk_gpio_intr(port, 0);  
 		NVIC_DisableIRQ((IRQn_Type)p_port->irq);
 		p_port->prio = IRQ_PRI_Lowest;
 	}
@@ -1476,8 +1531,8 @@ int hal_gpio_ext_int_unreg(int port, int pin)
 
 int hal_gpio_ext_int_mask(int port, int pin, int rise, int fall, int wup)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return GPIO_ERR_INVALID_PARAM;
@@ -1511,8 +1566,8 @@ int hal_gpio_ext_int_mask(int port, int pin, int rise, int fall, int wup)
 
 int hal_gpio_ext_int_unmask(int port, int pin, int rise, int fall, int wup)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if ((port >= GPIO_PORT_MAX) || (port < 0))
 		return GPIO_ERR_INVALID_PARAM;
@@ -1559,11 +1614,13 @@ void hal_gpio_mux_out_cm4_halt(int port, int pin)
 	WR_WORD(0x441262b4, reg);	
 }
 
-
+#if !(CFG_BUILD_ROM)
+void hal_gpio_suspend(void) __attribute__((section("RAM_PM")));
+#endif	// !CFG_BUILD_ROM */ 
 void hal_gpio_suspend(void)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	if (gio->gpio_le_ctrl != 0) {
 		WR_WORD(GLOBAL2_REG_GPIO_LE_CTRL, gio->gpio_le_ctrl);
@@ -1582,11 +1639,13 @@ void hal_gpio_suspend(void)
 	}
 }
 
-
+#if !(CFG_BUILD_ROM)
+void hal_gpio_resume(void) __attribute__((section("RAM_PM")));
+#endif	// !CFG_BUILD_ROM */ 
 void hal_gpio_resume(void)
 {
-	//rom_if_t *pif = &g_gio_if;
-	gio_t *gio = &g_gio;
+	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
+	gio_t *gio = (gio_t *)pif->gio->gio;
 
 	/// resume pin mux
 	if (gio->pin_mux_gpio_0_reg != gio->pin_mux_gpio_0_reg_dft) {
@@ -1717,5 +1776,5 @@ void hal_gpio_resume(void)
 	}
 
 }
-
+#endif	// CFG_BUILD_ROM || !CFG_HAL_ROM  
 

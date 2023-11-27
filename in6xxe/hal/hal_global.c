@@ -24,6 +24,7 @@
 #include "in_debug.h"
 #include "in_ana.h"
 #include "in_rom_if.h"
+#include "in_compile.h"
 
 //#include "../bootloader/inc/boot_share.h"
 
@@ -38,6 +39,7 @@
 #include "./hal/hal_wdt.h"
 #include "./hal/hal_timer.h"
 #include "./hal/hal_testmux.h"
+#include "zephyr/irq.h"
 
 #if !(CFG_BUILD_ROM)
 #if !CFG_NO_OS
@@ -85,6 +87,7 @@ int SER_GetChar(uint8_t *p)
 }
 #endif		// CFG_DBG_IF_UART
 
+#if 0
 void HardFault_Handler_C(unsigned long * svc_args, unsigned int lr_value) __attribute__((section("ISR")));
  
 // HardFault handler wrapper in assembly language.
@@ -153,6 +156,7 @@ void HardFault_Handler_C(unsigned long * hardfault_args, unsigned int lr_value)
 
 	while(1); // endless loop
 }
+#endif
 #else
 int SER_PutChar(int c) {
 	return 1;
@@ -192,9 +196,9 @@ static ble_isr_t g_ble_isr;
  ****************************************************************************************
  */
 #if !(CFG_BUILD_ROM)
-__irq void BLE_Core_Handler(void) __attribute__((section("ISR")));
+__irq void BLE_Core_Handler(const void *arg) __attribute__((section("ISR")));
 #endif	// !CFG_BUILD_ROM */ 
-__irq void BLE_Core_Handler(void)
+__irq void BLE_Core_Handler(const void *arg)
 {
 	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
 	ble_isr_t *pb = (ble_isr_t *)pif->glb->ble;
@@ -212,7 +216,8 @@ void hal_ble_isr_register(void *arg, void (*callback)(void *))
 	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
 	ble_isr_t *pb = (ble_isr_t *)pif->glb->ble;
 	
-	uint32_t pri_mask = __disable_irq();
+    irq_connect_dynamic(Ble_IRQn, IRQ_PRI_High, BLE_Core_Handler, NULL, 0);
+	uint32_t pri_mask = disable_irq();
 	pb->callback = callback;
 	pb->arg = arg;
 	__set_PRIMASK(pri_mask);
@@ -223,7 +228,7 @@ void hal_ble_isr_deregister(void)
 	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
 	ble_isr_t *pb = (ble_isr_t *)pif->glb->ble;
 
-	uint32_t pri_mask = __disable_irq();
+	uint32_t pri_mask = disable_irq();
 	pb->callback = NULL;
 	pb->arg = NULL;
 	__set_PRIMASK(pri_mask);
@@ -297,7 +302,7 @@ void hal_glb_isr_register(int irq_id, int prio, void *arg, void (*callback)(void
 	if (irq_id >= GLB_IRQ_MAX)
 		return;
 
-	uint32_t pri_mask = __disable_irq();
+	uint32_t pri_mask = disable_irq();
 
 	piq->isr[irq_id].arg = arg;
 	piq->isr[irq_id].callback = callback;
@@ -333,7 +338,7 @@ void hal_glb_isr_deregister(int irq_id)
 	if (irq_id >= GLB_IRQ_MAX)
 		return;
 
-	uint32_t pri_mask = __disable_irq();
+	uint32_t pri_mask = disable_irq();
 	if (piq->irq_map & (1 << irq_id)) {
 		/// mask it 
 		glb_int_mask((1 << irq_id));
@@ -433,7 +438,7 @@ int hal_swi_register(void *arg, void (*callback)(void *))
 
 	for (i = 0; i < SWI_NB; i++) {
 		if (!((pd->used_map >> i) & 1)) {
-			uint32_t pri_mask = __disable_irq();
+			uint32_t pri_mask = disable_irq();
 
 			pd->swi[i].arg = arg;
 			pd->swi[i].callback = callback;
@@ -463,7 +468,7 @@ void hal_swi_deregister(int index)
 		return;
 
 	if (pd->used_map & (1 << index)) {
-		uint32_t pri_mask = __disable_irq();
+		uint32_t pri_mask = disable_irq();
 		pd->swi[index].arg = NULL;
 		pd->swi[index].callback = NULL;
 		pd->used_map &= ~(1 << index);
@@ -555,7 +560,7 @@ void hal_nmi_register(int irq_id, void *arg, void (*callback)(void *))
 	if (irq_id >= NMI_IRQ_MAX)
 		return;
 
-	uint32_t pri_mask = __disable_irq();
+	uint32_t pri_mask = disable_irq();
 	pd->nmi[irq_id].arg = arg;
 	pd->nmi[irq_id].callback = callback;
 	if (pd->irq_map == 0) {
@@ -576,7 +581,7 @@ void hal_nmi_deregister(int irq_id)
 	if (irq_id >= NMI_IRQ_MAX)
 		return;
 
-	uint32_t pri_mask = __disable_irq();
+	uint32_t pri_mask = disable_irq();
 	pd->nmi[irq_id].arg = NULL;
 	pd->nmi[irq_id].callback = NULL;
 	nmi_int_mask((1 << irq_id));
@@ -657,7 +662,7 @@ void hal_osc_xo_isr_register(int irq_id, int prio, void *arg, void (*callback)(v
 	if (irq_id >= OSC_XO_IRQ_MAX)
 		return;
 
-	uint32_t pri_mask = __disable_irq();
+	uint32_t pri_mask = disable_irq();
 	pd->isr[irq_id].arg = arg;
 	pd->isr[irq_id].callback = callback;
 
@@ -690,7 +695,7 @@ void hal_osc_xo_isr_deregister(int irq_id)
 	if (irq_id >= OSC_XO_IRQ_MAX)
 		return;
 
-	uint32_t pri_mask = __disable_irq();
+	uint32_t pri_mask = disable_irq();
 
 	if (pd->irq_map & (1 << irq_id)) {
 		// mask it 
@@ -768,6 +773,8 @@ void hal_global_pre_init(void)
 	//   
 	//
 	WR_WORD(AON_REG_SPARE_CTRL_REG0, (uint32_t)&g_rom_if); 
+
+    hal_global_post_init();
 }
 
 void hal_global_post_init(void)
@@ -785,7 +792,7 @@ void hal_global_post_init(void)
 	/// **** RTC ****
 	/// Note: There is a 1 second wait before RTC settle down.
 #if !CFG_SIM
-	hal_clk_32k(CFG_RTC_EN);
+	//hal_clk_32k(CFG_RTC_EN);
 #endif
 
 	/// Disable BLE external wakeup (Software will wake it up)
