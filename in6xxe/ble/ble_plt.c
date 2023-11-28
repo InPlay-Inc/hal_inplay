@@ -380,7 +380,7 @@ static int ble_ecc_key_async_end(uint8_t *key_x, uint8_t *key_y)
 
 	if (hw_ecc_status == ECC_ERR_OK) {
 
-		for (uint32_t i; i < 32; i++) {
+		for (uint32_t i = 0; i < 32; i++) {
 			key_x[i] = Rx[i];
 			key_y[i] = Ry[i];
 		}
