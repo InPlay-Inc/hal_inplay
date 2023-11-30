@@ -19,6 +19,14 @@ zephyr_library_sources(
 	hal/hal_trng.c
     hal/hal_ecc.c
     startup/system_inxxx.c
+	spi_flash/src/spi_flash.c
+	bootloader/ram/src/boot_cfg.c
+	bootloader/ram/src/ram_entry.c
+)
+
+zephyr_library_include_directories(
+	bootloader/inc/
+	spi_flash/inc
 )
 
 function(target_linker_script target deptype scriptfiles)
@@ -46,8 +54,10 @@ function(target_linker_script target deptype scriptfiles)
         target_link_libraries("${target}" "${deptype}" "-T ${scriptname}")
     endforeach()
 endfunction()
+
 zephyr_link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/lib/gcc/libhw_ana.a)
 target_linker_script(in6xxe INTERFACE "rom/hw_ana_rom.ld")
+
 if (CONFIG_BT_IN6XX)
     zephyr_include_directories(
         ble

@@ -76,7 +76,7 @@ void SystemInit (void)
 #if CFG_COPY_VTOR_TO_RAM
 	in_memcpy((void *)CFG_VTOR_ADDR, (void *)&__Vectors, (size_t)&__Vectors_Size);
 #endif
-	//SCB->VTOR = CFG_VTOR_ADDR & SCB_VTOR_TBLOFF_Msk ;
+	SCB->VTOR = CFG_VTOR_ADDR & SCB_VTOR_TBLOFF_Msk ;
 #endif
 
 	hal_global_pre_init();
