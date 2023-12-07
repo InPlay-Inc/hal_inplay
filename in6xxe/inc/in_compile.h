@@ -28,10 +28,10 @@
 #define INLINE				
 #define FORCEINLINE 	
 #define _IRQ 				
-#define RAM_PM 
-#define ISR_RO 
-#define BLE_RW 
-#define BLE_RO 
+#define RAM_PM __attribute__((section("RAM_PM")))
+#define ISR_RO __attribute__((section("ISR")))
+#define BLE_RW __attribute__((section("BLE_RW")))
+#define BLE_RO __attribute__((section("BLE_RO")))
 
 #define MST_RO 
 #define SLV_RO 
@@ -40,7 +40,7 @@
 #define __irq
 #define __nop __NOP
 #define __rev __REV
-#define __weak   __attribute__((weak))
+//#define __weak   __attribute__((weak))
 #define __forceinline __attribute__((always_inline))
 #endif
 

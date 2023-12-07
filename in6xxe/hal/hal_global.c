@@ -216,7 +216,7 @@ void hal_ble_isr_register(void *arg, void (*callback)(void *))
 	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
 	ble_isr_t *pb = (ble_isr_t *)pif->glb->ble;
 	
-    irq_connect_dynamic(Ble_IRQn, IRQ_PRI_High, BLE_Core_Handler, NULL, 0);
+    //irq_connect_dynamic(Ble_IRQn, IRQ_PRI_High, BLE_Core_Handler, NULL, 0);
 	uint32_t pri_mask = disable_irq();
 	pb->callback = callback;
 	pb->arg = arg;
