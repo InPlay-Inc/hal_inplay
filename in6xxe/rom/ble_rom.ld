@@ -645,7 +645,6 @@ hci_build_le_evt = 0x00027135;
 hci_cmd_cmp_event_handler_tab_size = 0x00027205;
 hci_cmd_desc_root_tab_size = 0x00027209;
 hci_cmd_get_max_param_size = 0x0002720d;
-hci_cmd_received = 0x00027221;
 hci_cmd_reject = 0x000273e1;
 hci_cmd_stat_event_handler = 0x000274fd;
 hci_cmd_stat_event_handler_tab_size = 0x0002760b;

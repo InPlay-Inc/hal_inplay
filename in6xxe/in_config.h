@@ -4,7 +4,7 @@
  * Auto Generated Project Configuration File
  *		Do not modify !!!
  *
- * @file E:\Tom\source\ble50\in-dev\proj\BLE\proj_ble_low_power_demo\inc\in_config.h
+ * @file E:\Tom\zephry\zephyrproject\modules\hal\inplay\in6xxe\in_config.h
  * in_config tool version 3.0.0
  *
  * @brief Project Configuration File
@@ -25,8 +25,8 @@
 /// @Misc::PM
 #define CFG_LOW_POWER	0
 #define CFG_PM_EN	0
-#define CFG_PM_DEEP_SLEEP_THRD	5
-#define CFG_PM_DEEP_SLEEP_COMP_TIME	200
+#define CFG_PM_DEEP_SLEEP_THRD	0
+#define CFG_PM_DEEP_SLEEP_COMP_TIME	0
 #define CFG_PM_WUP_SLP_TMR	1
 #define CFG_PM_WUP_BLE	1
 #define CFG_PM_WUP_BROWN_OUT	0
@@ -49,12 +49,9 @@
 #define CFG_HEAP_SIZE	0x400
 /// @Misc::DEBUG
 #define CFG_DBG_EN	0
-#define CFG_DBG_IF_UART	1
-#define CFG_DBG_IF_UART_PORT	1
-#define CFG_DBG_IF_UART_BAUD	115200
-#define CFG_DBG_IF_UART_IRQ	0
+#define CFG_DBG_IF_UART	0
 #define CFG_DBG_IF_RTT_VIEW	0
-#define CFG_DBG_FLAG	0x00000007
+#define CFG_DBG_FLAG	0
 /// @Misc::CLOCK
 #define CFG_ROOT_CLK_XO_32M	1
 #define CFG_ROOT_CLK_XO_64M	0
@@ -141,7 +138,7 @@
 #define CFG_EXT_SPI_FLASH_POWER_FROM_602	1
 #define CFG_EXT_SPI_FLASH_POWER_ON_SETTLE_TIME	300
 #define CFG_FW_UPD_EN	0
-#define CFG_FLASH_PROJ_ADDR	0x202000
+#define CFG_FLASH_PROJ_ADDR	0x304000
 #define CFG_FLASH_PROJ_SIZE	0x1e000
 /// @Flash::BOOTRAM
 #define CFG_BRAM_COLD_BOOT_ADDR	0x304000
@@ -166,8 +163,8 @@
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 #define CFG_BRAM_RAM_APP_EN	0
-#define CFG_BRAM_RAM_APP_FLASH_ADDR	0
-#define CFG_BRAM_RAM_APP_RAM_ADDR	0
+#define CFG_BRAM_RAM_APP_FLASH_ADDR	0x0
+#define CFG_BRAM_RAM_APP_RAM_ADDR	0x0
 #define CFG_BRAM_RAM_APP_SIZE	0x0
 #define CFG_BRAM_SSPI_INT_EN	0
 #define CFG_BRAM_SSPI_INT_PORT	0
@@ -269,7 +266,7 @@
 #define CFG_BLE_PARAM_CODED_PHY_500_EN	0
 #define CFG_BLE_PARAM_SLEEP_EN	1
 #define CFG_BLE_ADV_NO_DELAY_EN	0
-#define CFG_BLE_ADV_IGNORE_TIMESTAMP_EN	1
+#define CFG_BLE_ADV_IGNORE_TIMESTAMP_EN	0
 #define CFG_BLE_OSC_INT_EN	1
 #define CFG_BLE_PARAM_WL_MAX	4
 #define CFG_BLE_PARAM_RAL_MAX	3
