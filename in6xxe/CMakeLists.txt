@@ -19,6 +19,7 @@ zephyr_library_sources(
 	hal/hal_trng.c
     hal/hal_ecc.c
 	hal/hal_spi_flash.c
+	hal/hal_efuse.c
     startup/system_inxxx.c
 	spi_flash/src/spi_flash.c
 	bootloader/ram/src/boot_cfg.c
