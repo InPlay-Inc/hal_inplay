@@ -32,7 +32,7 @@
 #define ISR_RO __attribute__((section("ISR")))
 #define BLE_RW __attribute__((section("BLE_RW")))
 #define BLE_RO __attribute__((section("BLE_RO")))
-
+#define BLE_RODATA __attribute__((section("BLE_RODATA")))
 #define MST_RO 
 #define SLV_RO 
 

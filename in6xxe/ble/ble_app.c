@@ -180,7 +180,14 @@ static ble_app_t g_app = {
  * API FUNCTIONS
  ****************************************************************************************
  */
+void ble_register_hci_cb(
+			void (*ble_hci_write)(void *hdl, uint8_t *buffer, uint16_t buffer_len, void (*callback)(void *arg, uint8_t status), void *arg),
+ 			void (*ble_hci_read)(void *hdl, uint8_t *buffer, uint16_t buffer_len, void(*callback)(void *arg, uint8_t status), void *arg))
+{
 
+	g_plt_fun.ble_hci_write = ble_hci_write;
+	g_plt_fun.ble_hci_read = ble_hci_read;
+}
 void *ble_stack_init(uint8_t *bd_addr)
 {
 	ble_app_t *p_ba = &g_app;

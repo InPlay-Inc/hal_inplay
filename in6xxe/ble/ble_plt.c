@@ -39,7 +39,7 @@
 #if CFG_PM_EN
 static struct pm_module g_ble_pm;
 #endif
-
+#define CFG_HCI 1
 /**********************************************************************
 *
 *
@@ -116,7 +116,20 @@ static void ble_semaphore_delete(void *hdl)
 typedef struct {
 	void *hdl_bs;
 } ble_stack_t;
+typedef struct {
+	void *hdl_bs;
+	//void *h_uart;
 
+#if !CFG_NO_OS
+	osThreadId hci_tid;
+#endif	// !CFG_NO_OS
+
+	//hci_cb_t read_cb;
+	//hci_cb_t write_cb;
+} hci_t; 
+#if CFG_HCI
+static hci_t g_hci __attribute__((section("BLE_RW"))); ;
+#endif
 static ble_stack_t g_ble_stack;
 static ble_stack_cb_t g_ble_stack_cb = {0};
 
@@ -191,7 +204,15 @@ static void ble_stack_signal(void)
 
 static void *ble_hci_init(void *arg)
 {
-    return NULL;
+#if CFG_HCI 
+	hci_t *p_hci = &g_hci;
+
+	p_hci->hdl_bs = arg;
+
+	return (void *)p_hci;
+#else
+	return NULL;
+#endif
 }
 
 static void ble_hci_deinit(void *hdl)
@@ -264,7 +285,7 @@ static const EC_CURVE_DATA SEC192R1 = {
 
 //#if CFG_FPGA
 #if 1
-static const EC_CURVE_DATA SEC256R1 __attribute__((section("BLE_RW"))) = {
+static const EC_CURVE_DATA SEC256R1 __attribute__((section("BLE_RODATA"))) = {
 	32,
 	{0xFF,0xFF,0xFF,0xFF,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF},	// modulus m (p)
 	{0xFF,0xFF,0xFF,0xFF,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01},	// m'
