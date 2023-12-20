@@ -10,6 +10,7 @@ if(CONFIG_HAS_IN6XXE_HAL)
 	zephyr_include_directories(
 		in6xxe
 		in6xxe/inc
+		include
 	  )
     add_subdirectory(in6xxe)
 endif()
