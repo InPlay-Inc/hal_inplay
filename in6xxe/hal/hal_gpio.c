@@ -604,12 +604,12 @@ int hal_gpio_output_status(int port, int pin)
 	}
 
 	if (port == 4) {
-		pin += 8;
+		pin += 6;
 		addr = GLOBAL_REG_GPIO_34_IO_STATUS;
 	}
 
 	uint32_t reg = RD_WORD(addr);
-	return ((reg >> (pin + 16)) & 1);
+	return ((reg >> (pin + 10)) & 1);
 }
 
 int hal_gpio_input_status(int port, int pin)
