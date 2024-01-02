@@ -38,7 +38,8 @@
 
 #if defined (__GNUC__)
 #define __irq
-#define __nop __NOP
+#define __wfi() __asm volatile("wfi")
+#define __nop() __asm volatile("nop")
 #define __rev __REV
 //#define __weak   __attribute__((weak))
 #define __forceinline __attribute__((always_inline))

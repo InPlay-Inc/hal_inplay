@@ -394,9 +394,9 @@ __irq void TMR1_Handler(void)
 }
 
 #if !(CFG_BUILD_ROM)
-__irq void TMR2_Handler(void) __attribute__((section("ISR")));
+__irq void TMR2_Handler(void *arg) __attribute__((section("ISR")));
 #endif  // !CFG_BUILD_ROM */ 
-__irq void TMR2_Handler(void)
+__irq void TMR2_Handler(void *arg)
 {
     tmr_isr_handler(TMR2_ID);
 }

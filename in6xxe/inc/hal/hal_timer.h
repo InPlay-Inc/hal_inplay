@@ -251,7 +251,7 @@ static FORCEINLINE void aon_tmr2_snap_tick(void)
     WR_WORD(GLOBAL2_REG_SNAPSHOT_CTRL, (RD_WORD(GLOBAL2_REG_SNAPSHOT_CTRL)|GLOBAL2_REG_SNAPSHOT_CTRL_CTL_AON_TIMER_2_TAKE_SNAPSHOT));
 }
 
-static FORCEINLINE uint32_t aon_tmr2_read_tick(int id)          
+static FORCEINLINE uint32_t aon_tmr2_read_tick(void)          
 {
     return RD_WORD(GLOBAL2_REG_AON_TIMER_2_SNAPSHOT_VAL);
 }
@@ -776,7 +776,7 @@ static FORCEINLINE void aon_tmr_emit_wup_dis(int idx)
 
 static FORCEINLINE void aon_tmr_emit_man_clr(int idx)
 {
-    WR_WORD(GLOBAL2_REG_AON_TIMER_2_CTL, (RD_WORD(GLOBAL2_REG_AON_TIMER_2_CTL)|(1 << 16 << idx)));
+    WR_WORD(GLOBAL2_REG_AON_TIMER_2_CTL, Bit0 | (RD_WORD(GLOBAL2_REG_AON_TIMER_2_CTL)|(1 << 16 << idx)));
 }
 /*
  * Inline Timer Functions

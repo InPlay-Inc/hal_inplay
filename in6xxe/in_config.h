@@ -24,11 +24,11 @@
 #define CFG_FPGA	0
 /// @Misc::PM
 #define CFG_LOW_POWER	0
-#define CFG_PM_EN	0
+#define CFG_PM_EN	1
 #define CFG_PM_DEEP_SLEEP_THRD	0
 #define CFG_PM_DEEP_SLEEP_COMP_TIME	0
 #define CFG_PM_WUP_SLP_TMR	1
-#define CFG_PM_WUP_BLE	1
+#define CFG_PM_WUP_BLE	0
 #define CFG_PM_WUP_BROWN_OUT	0
 #define CFG_PM_WUP_MIX_SIGNAL	0
 #define CFG_PM_WUP_UART	0

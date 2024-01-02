@@ -57,9 +57,9 @@ static volatile clk_32k_t g_lpc = {0};
  ****************************************************************************************
  */
 #if !(CFG_BUILD_ROM)
-_IRQ void Calib_Handler(void) __attribute__((section("ISR")));
+_IRQ void Calib_Handler(void *arg) __attribute__((section("ISR")));
 #endif	// !CFG_BUILD_ROM */ 
-_IRQ void Calib_Handler(void)
+_IRQ void Calib_Handler(void *arg)
 {
 #if !CFG_FPGA
 	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);

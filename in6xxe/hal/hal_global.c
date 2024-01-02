@@ -773,8 +773,6 @@ void hal_global_pre_init(void)
 	//   
 	//
 	WR_WORD(AON_REG_SPARE_CTRL_REG0, (uint32_t)&g_rom_if); 
-
-    hal_global_post_init();
 }
 
 void hal_global_post_init(void)
@@ -792,7 +790,7 @@ void hal_global_post_init(void)
 	/// **** RTC ****
 	/// Note: There is a 1 second wait before RTC settle down.
 #if !CFG_SIM
-	//hal_clk_32k(CFG_RTC_EN);
+	hal_clk_32k(CFG_RTC_EN);
 #endif
 
 	/// Disable BLE external wakeup (Software will wake it up)
