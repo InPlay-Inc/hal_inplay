@@ -554,7 +554,7 @@ int hal_timer_start(int tmr_id, int reload, int manual, uint32_t tick)
     //pd->callback = tmr_cb;
 
     tmr_int_clear(tmr_id);
-    tmr_read_tick(0);//dummy read
+    //tmr_read_tick(0);//dummy read
     NVIC_ClearPendingIRQ((IRQn_Type)pd->irq);
     NVIC_SetPriority((IRQn_Type)pd->irq, pd->prio); 
     NVIC_EnableIRQ((IRQn_Type)pd->irq);
@@ -588,7 +588,7 @@ int hal_timer_stop(int tmr_id)
 
     hal_clk_tmr_en(tmr_id, 0);
 
-    tmr_read_tick(0);
+    //tmr_read_tick(0);
 
     return TMR_ERR_OK;
 }

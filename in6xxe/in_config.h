@@ -4,7 +4,7 @@
  * Auto Generated Project Configuration File
  *		Do not modify !!!
  *
- * @file E:\Tom\zephry\zephyrproject\modules\hal\inplay\in6xxe\in_config.h
+ * @file E:\Tom\zephry\zephyrproject\hal_inplay\in6xxe\in_config.h
  * in_config tool version 3.0.0
  *
  * @brief Project Configuration File
@@ -26,9 +26,13 @@
 #define CFG_LOW_POWER	0
 #define CFG_PM_EN	1
 #define CFG_PM_DEEP_SLEEP_THRD	0
-#define CFG_PM_DEEP_SLEEP_COMP_TIME	0
+#define CFG_PM_DEEP_SLEEP_COMP_TIME	200
 #define CFG_PM_WUP_SLP_TMR	1
-#define CFG_PM_WUP_BLE	0
+#if CONFIG_PM && defined CONFIG_BT_IN6XX
+#define CFG_PM_WUP_BLE 	1
+#else
+#define CFG_PM_WUP_BLE 0
+#endif
 #define CFG_PM_WUP_BROWN_OUT	0
 #define CFG_PM_WUP_MIX_SIGNAL	0
 #define CFG_PM_WUP_UART	0
@@ -98,7 +102,7 @@
 #define CFG_QSPI_CLK	32000000
 #define CFG_AUDIO_SDM_CLK_MUX	0
 #define CFG_SI2S_CLK_MUX	1
-#define CFG_RTC_EN	0
+#define CFG_RTC_EN	1
 #define CFG_LPC_PPM_OFFSET	0
 #define CFG_RTC_CAP	0x03
 #define CFG_LPC_CALIB	1
@@ -264,14 +268,14 @@
 #define CFG_BLE_PARAM_BD_ADDR	0xcc, 0x04, 0x03, 0x02, 0x01, 0xab
 #define CFG_BLE_PARAM_SLP_ALGO_DUR	312
 #define CFG_BLE_PARAM_LPC_DRIFT	75
-#define CFG_BLE_PARAM_OSC_WUP_TIME	30
+#define CFG_BLE_PARAM_OSC_WUP_TIME	0x30
 #define CFG_BLE_PARAM_MAX_SLEEP_DURATION_TIME	0x0030d400
 #define CFG_BLE_PARAM_LPC_32K_EN	0
 #define CFG_BLE_PARAM_CODED_PHY_500_EN	0
-#define CFG_BLE_PARAM_SLEEP_EN	0
+#define CFG_BLE_PARAM_SLEEP_EN	1
 #define CFG_BLE_ADV_NO_DELAY_EN	0
 #define CFG_BLE_ADV_IGNORE_TIMESTAMP_EN	0
-#define CFG_BLE_OSC_INT_EN	1
+#define CFG_BLE_OSC_INT_EN	0
 #define CFG_BLE_PARAM_WL_MAX	4
 #define CFG_BLE_PARAM_RAL_MAX	3
 #define CFG_BLE_PARAM_DUP_FILT_MAX	10
@@ -305,9 +309,9 @@
 #define CFG_BLE_STK_MEM_USAGE_PRF_EN	0
 #define CFG_OS_BLE_STACK_TASK_STACK_SIZE	1768
 #define CFG_OS_BLE_STACK_TASK_PRIO	0
-#define CFG_OS_BLE_HCI_TASK_STACK_SIZE	768
+#define CFG_OS_BLE_HCI_TASK_STACK_SIZE	0
 #define CFG_OS_BLE_HCI_TASK_PRIO	0
-#define CFG_OS_BLE_EVT_TASK_STACK_SIZE	0
+#define CFG_OS_BLE_EVT_TASK_STACK_SIZE	1024
 #define CFG_OS_BLE_EVT_TASK_PRIO	0
 #define CFG_OS_BLE_NB_TASK	2
 /// @BLE::DEV
