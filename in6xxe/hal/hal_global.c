@@ -393,9 +393,9 @@ static swi_ctl_t g_swi = {0};
  ****************************************************************************************
  */
 #if !(CFG_BUILD_ROM)
-__irq void SWI_Handler(void) __attribute__((section("ISR")));
+__irq void SWI_Handler(void *arg) __attribute__((section("ISR")));
 #endif	// !CFG_BUILD_ROM */ 
-__irq void SWI_Handler(void)
+__irq void SWI_Handler(void *arg)
 {
 	rom_if_t *pif = (rom_if_t *)RD_WORD(ROM_IF_BASE);
 	swi_ctl_t *pd = (swi_ctl_t *)pif->glb->swi;

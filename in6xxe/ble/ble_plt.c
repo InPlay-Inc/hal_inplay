@@ -522,7 +522,7 @@ static void ble_irq_unmask(uint32_t primask)
 static void ble_irq_enable(void) __attribute__((section("BLE_RO")));
 static void ble_irq_enable(void)
 {
-	NVIC_SetPriority(Ble_IRQn, IRQ_PRI_Highest);
+	NVIC_SetPriority(Ble_IRQn, IRQ_PRI_RealTime);
 	NVIC_EnableIRQ(Ble_IRQn);
 }
 

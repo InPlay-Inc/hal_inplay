@@ -776,7 +776,7 @@ void hal_clk_32k(int clk_src)
 		clk_rtc_en();
 		/// wait ( < 1 second) for RTC settle
 		hal_timer_set_tmo_callback(TMR2_ID,  IRQ_PRI_High, (void *)&g_lpc, rtc_call_back);
-		hal_timer_start(TMR2_ID, 0, 0, CFG_D0_CLK); 
+		hal_timer_start(TMR2_ID, 0, 0, CFG_TIM2_CLK); 
 
 		/// Set the RTC calue
 		if (CFG_RTC_CLK) {

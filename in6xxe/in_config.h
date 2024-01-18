@@ -57,8 +57,8 @@
 #define CFG_DBG_IF_RTT_VIEW	0
 #define CFG_DBG_FLAG	0
 /// @Misc::CLOCK
-#define CFG_ROOT_CLK_XO_32M	0
-#define CFG_ROOT_CLK_XO_64M	1
+#define CFG_ROOT_CLK_XO_32M	1
+#define CFG_ROOT_CLK_XO_64M	0
 #define CFG_ROOT_CLK_RC_32M	0
 #define CFG_ROOT_CLK_CPLL_32M	0
 #define CFG_ROOT_CLK_CPLL_64M	0
